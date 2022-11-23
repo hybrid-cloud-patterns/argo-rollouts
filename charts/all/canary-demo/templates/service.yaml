@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "canary-demo.name" . }}-service
+  namespace: {{ .Chart.Name }}
+spec:
+  ports:
+  {{- template "canary-demo.serviceSpec" . }}
+  selector:
+    app: {{ include "canary-demo.name" . }}

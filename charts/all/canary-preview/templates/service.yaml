@@ -1,0 +1,17 @@
+{{- range .Values.canary }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Chart.Name }}-{{ .name }}
+  namespace: {{ $.Chart.Name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  selector:
+    app: {{ $.Chart.Name }}-{{ .name }}
+  ports:
+  - port: {{ $.Values.service.port }}
+    targetPort: {{ $.Values.service.targetPort }}
+    protocol: {{ $.Values.service.protocol }}
+{{- end }}

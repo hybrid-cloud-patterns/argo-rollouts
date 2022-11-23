@@ -1,0 +1,16 @@
+{{- range .Values.bluegreen }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ $.Chart.Name }}-{{ .name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  selector:
+    app: {{ $.Chart.Name }}
+  ports:
+  - protocol: {{ $.Values.service.protocol }}
+    port: {{ $.Values.service.port }}
+    targetPort: {{ $.Values.service.targetPort }}
+{{- end }}

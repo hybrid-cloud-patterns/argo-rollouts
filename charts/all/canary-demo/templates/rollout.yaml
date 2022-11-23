@@ -1,0 +1,33 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "canary-demo.name" . }}
+  namespace: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: {{ include "canary-demo.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "canary-demo.name" . }}
+    spec:
+      containers:
+      - name: {{ include "canary-demo.name" . }}
+        image: {{ .Values.global.rollout.image }}
+        ports:       
+        {{- template "canary-demo.containerSpec" . }}

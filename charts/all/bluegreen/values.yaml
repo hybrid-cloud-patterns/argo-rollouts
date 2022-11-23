@@ -1,0 +1,32 @@
+global:
+  rollout:
+    image: argoproj/rollouts-demo:blue
+
+replicaCount: 2
+revisionHistoryLimit: 2
+
+bluegreen:
+  - name: active
+  - name: preview
+
+image:
+  pullPolicy: Always
+
+containers:
+  name: bluegreen-demo
+  containerPort: 8080
+
+strategy:
+  blueGreen:
+    autoPromotionEnabled: false
+
+service:
+  protocol: TCP
+  port: 80
+  targetPort: 8080
+
+route:
+  kind: Service
+  weight: 100
+  targetPort: 8080
+  wildcardPolicy: none

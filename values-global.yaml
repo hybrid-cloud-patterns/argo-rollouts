@@ -1,11 +1,13 @@
 ---
 global:
-  pattern: multicloud-gitops
+  pattern: multicloud-rollouts
 
   options:
     useCSV: false
     syncPolicy: Automatic
     installPlanApproval: Automatic
 
+  rollout:
+    image: argoproj/rollouts-demo:blue
 main:
   clusterGroupName: hub

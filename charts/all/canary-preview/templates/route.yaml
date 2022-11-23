@@ -1,0 +1,20 @@
+{{- range .Values.canary }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ $.Chart.Name }}-{{ .name }}
+  namespace: {{ $.Chart.Name }}
+  labels:
+    app: {{ $.Chart.Name }}-{{ .name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  port:
+    targetPort: {{ $.Values.service.targetPort }}
+  to:
+    kind: {{ $.Values.route.kind }}
+    name: {{ $.Chart.Name }}-{{ .name }}
+    weight: {{ $.Values.route.weight }}
+  wildcardPolicy: {{ $.Values.route.wildcardPolicy | default "none" }}
+{{- end }}

@@ -1,0 +1,44 @@
+---
+# This example demonstrates how to deploy a preview ReplicaSet using an Experiment. The preview
+# ReplicaSet will run but receive no production traffic, since its selector labels are set
+# differently than the rollout's selector labels.
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-production
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-production
+    spec:
+      containers:
+      - name: canary-production
+        image: {{ .Values.global.rollout.image }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+  strategy:
+    canary:
+      steps:
+      # The initial step starts an experiment that runs a single pod ReplicaSet using the new pod spec
+      # When the experiment is terminated, the rollout will progress through rest of the canary steps.
+      - experiment:
+          templates:
+          - name: canary-preview
+            specRef: canary
+            # Selector and metadata are overwritten to be something different from the rollout's
+            # spec.selector. This allows the preview stack to be reachable through a different
+            # service without receiving production traffic.
+            selector:
+              matchLabels:
+                app: {{ .Chart.Name }}-preview
+            metadata:
+              labels:
+                app: {{ .Chart.Name }}-preview

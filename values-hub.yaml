@@ -9,18 +9,20 @@ clusterGroup:
   - open-cluster-management
   - vault
   - golang-external-secrets
-  - config-demo
+  - argo-rollouts
+  - bluegreen
+  - canary-demo
+  - canary-preview
 
   subscriptions:
     acm:
       name: advanced-cluster-management
       namespace: open-cluster-management
       channel: release-2.6
-      #csv: advanced-cluster-management.v2.6.1
 
   projects:
   - hub
-  - config-demo
+  - argo-rollouts
 
   applications:
     acm:
@@ -46,11 +48,29 @@ clusterGroup:
       project: hub
       path: common/golang-external-secrets
 
-    config-demo:
-      name: config-demo
-      namespace: config-demo
-      project: config-demo
-      path: charts/all/config-demo
+    argo-rollouts:
+      name: argo-rollouts
+      namespace: argo-rollouts
+      project: argo-rollouts
+      path: charts/all/argo-rollouts
+
+    bluegreen:
+      name: bluegreen
+      namespace: bluegreen
+      project: argo-rollouts
+      path: charts/all/bluegreen
+
+    canary-demo:
+      name: canary-demo
+      namespace: canary-demo
+      project: argo-rollouts
+      path: charts/all/canary-demo
+    
+    canary-preview:
+      name: canary-preview
+      namespace: canary-preview
+      project: argo-rollouts
+      path: charts/all/canary-preview      
 
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
