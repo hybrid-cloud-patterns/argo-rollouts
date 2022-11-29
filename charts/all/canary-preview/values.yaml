@@ -25,7 +25,7 @@ service:
 route:
   kind: Service
   weight: 100
-  wildcardPolicy: none
+  wildcardPolicy: None
   
 # resources: {}
 # We usually recommend not to specify default resources and to leave this as a conscious

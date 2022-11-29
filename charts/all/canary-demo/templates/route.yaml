@@ -8,11 +8,13 @@ metadata:
     app: {{ include "canary-demo.name" . }}
   annotations:
     argocd.argoproj.io/sync-wave: "3"
+    haproxy.router.openshift.io/balance: roundrobin
+    haproxy.router.openshift.io/disable_cookies: 'true'
 spec:
   port:
     targetPort: {{ .Values.service.targetPort }}
   to:
     kind: {{ .Values.route.kind }}
-    name: {{ include "canary-demo.name" . }}
+    name: {{ include "canary-demo.name" . }}-service
     weight: {{ .Values.route.weight }}
-  wildcardPolicy: {{ .Values.route.wildcardPolicy | default "none" }}
+  wildcardPolicy: {{ .Values.route.wildcardPolicy | default "None" }}

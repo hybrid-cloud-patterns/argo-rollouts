@@ -13,7 +13,7 @@ spec:
     targetPort: {{ $.Values.route.targetPort }}
   to:
     kind: {{ $.Values.route.kind }}
-    name:  {{ $.Values.route.name }}
+    name:  {{ $.Chart.Name }}-{{ .name }}
     weight: {{ $.Values.route.weight }}
-  wildcardPolicy: {{ $.Values.route.wildcardPolicy | default "none" }}
+  wildcardPolicy: {{ $.Values.route.wildcardPolicy | default "None" }}
 {{- end }}
