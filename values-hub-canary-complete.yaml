@@ -10,6 +10,7 @@ clusterGroup:
   - vault
   - golang-external-secrets
   - argo-rollouts
+  - canary-demo
 
   subscriptions:
     acm:
@@ -51,6 +52,12 @@ clusterGroup:
       project: argo-rollouts
       path: charts/all/argo-rollouts
 
+    canary-demo:
+      name: canary-demo
+      namespace: canary-demo
+      project: argo-rollouts
+      path: charts/all/canary-demo
+    
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
     # The default schedule is every 10 minutes: imperative.schedule

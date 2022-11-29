@@ -10,6 +10,7 @@ clusterGroup:
   - vault
   - golang-external-secrets
   - argo-rollouts
+  - bluegreen
 
   subscriptions:
     acm:
@@ -50,6 +51,12 @@ clusterGroup:
       namespace: argo-rollouts
       project: argo-rollouts
       path: charts/all/argo-rollouts
+
+    bluegreen:
+      name: bluegreen
+      namespace: bluegreen
+      project: argo-rollouts
+      path: charts/all/bluegreen
 
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm

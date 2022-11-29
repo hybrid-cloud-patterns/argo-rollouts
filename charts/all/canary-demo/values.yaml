@@ -18,7 +18,7 @@ service:
 route:
   kind: Service
   weight: 100
-  wildcardPolicy: none
+  wildcardPolicy: None
   
 
 resources: 

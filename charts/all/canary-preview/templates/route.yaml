@@ -16,5 +16,5 @@ spec:
     kind: {{ $.Values.route.kind }}
     name: {{ $.Chart.Name }}-{{ .name }}
     weight: {{ $.Values.route.weight }}
-  wildcardPolicy: {{ $.Values.route.wildcardPolicy | default "none" }}
+  wildcardPolicy: {{ $.Values.route.wildcardPolicy | default "None" }}
 {{- end }}

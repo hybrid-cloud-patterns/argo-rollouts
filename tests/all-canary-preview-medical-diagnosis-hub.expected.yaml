@@ -93,7 +93,7 @@ spec:
     kind: Service
     name: canary-preview-preview
     weight: 100
-  wildcardPolicy: none
+  wildcardPolicy: None
 ---
 # Source: canary-preview/templates/route.yaml
 apiVersion: route.openshift.io/v1
@@ -112,4 +112,4 @@ spec:
     kind: Service
     name: canary-preview-production
     weight: 100
-  wildcardPolicy: none
+  wildcardPolicy: None

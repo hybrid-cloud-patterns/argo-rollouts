@@ -1,5 +1,5 @@
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/argo-rollouts-sa.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -9,13 +9,13 @@ metadata:
     app.kubernetes.io/part-of: argo-rollouts
   name: argo-rollouts
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/argo-rollouts-notification-secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
   name: argo-rollouts-notification-secret
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/analysisruns-crd.yaml
 # This is an auto-generated file. DO NOT EDIT
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -2895,7 +2895,7 @@ spec:
     storage: true
     subresources: {}
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/analysistemplates-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -5656,7 +5656,7 @@ spec:
     storage: true
     subresources: {}
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/clusteranalysistemplates-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -8417,7 +8417,7 @@ spec:
     storage: true
     subresources: {}
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/experiments-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -11020,7 +11020,7 @@ spec:
     storage: true
     subresources: {}
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/rollouts-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -14461,7 +14461,94 @@ spec:
         statusReplicasPath: .status.HPAReplicas
       status: {}
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/argo-rollouts-aggregate-to-admin-clusterRole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: aggregate-cluster-role
+    app.kubernetes.io/name: argo-rollouts-aggregate-to-admin
+    app.kubernetes.io/part-of: argo-rollouts
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+  name: argo-rollouts-aggregate-to-admin
+rules:
+- apiGroups:
+  - argoproj.io
+  resources:
+  - rollouts
+  - rollouts/scale
+  - rollouts/status
+  - experiments
+  - analysistemplates
+  - clusteranalysistemplates
+  - analysisruns
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+# Source: rollouts/templates/argo-rollouts-aggregate-to-edit-clusterRole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: aggregate-cluster-role
+    app.kubernetes.io/name: argo-rollouts-aggregate-to-edit
+    app.kubernetes.io/part-of: argo-rollouts
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
+  name: argo-rollouts-aggregate-to-edit
+rules:
+- apiGroups:
+  - argoproj.io
+  resources:
+  - rollouts
+  - rollouts/scale
+  - rollouts/status
+  - experiments
+  - analysistemplates
+  - clusteranalysistemplates
+  - analysisruns
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+# Source: rollouts/templates/argo-rollouts-aggregate-to-view-clusterRole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: aggregate-cluster-role
+    app.kubernetes.io/name: argo-rollouts-aggregate-to-view
+    app.kubernetes.io/part-of: argo-rollouts
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
+  name: argo-rollouts-aggregate-to-view
+rules:
+- apiGroups:
+  - argoproj.io
+  resources:
+  - rollouts
+  - rollouts/scale
+  - experiments
+  - analysistemplates
+  - clusteranalysistemplates
+  - analysisruns
+  verbs:
+  - get
+  - list
+  - watch
+---
+# Source: rollouts/templates/argo-rollouts-clusterRole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -14677,94 +14764,7 @@ rules:
   - get
   - update
 ---
-# Source: rollouts/templates/install.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  labels:
-    app.kubernetes.io/component: aggregate-cluster-role
-    app.kubernetes.io/name: argo-rollouts-aggregate-to-admin
-    app.kubernetes.io/part-of: argo-rollouts
-    rbac.authorization.k8s.io/aggregate-to-admin: "true"
-  name: argo-rollouts-aggregate-to-admin
-rules:
-- apiGroups:
-  - argoproj.io
-  resources:
-  - rollouts
-  - rollouts/scale
-  - rollouts/status
-  - experiments
-  - analysistemplates
-  - clusteranalysistemplates
-  - analysisruns
-  verbs:
-  - create
-  - delete
-  - deletecollection
-  - get
-  - list
-  - patch
-  - update
-  - watch
----
-# Source: rollouts/templates/install.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  labels:
-    app.kubernetes.io/component: aggregate-cluster-role
-    app.kubernetes.io/name: argo-rollouts-aggregate-to-edit
-    app.kubernetes.io/part-of: argo-rollouts
-    rbac.authorization.k8s.io/aggregate-to-edit: "true"
-  name: argo-rollouts-aggregate-to-edit
-rules:
-- apiGroups:
-  - argoproj.io
-  resources:
-  - rollouts
-  - rollouts/scale
-  - rollouts/status
-  - experiments
-  - analysistemplates
-  - clusteranalysistemplates
-  - analysisruns
-  verbs:
-  - create
-  - delete
-  - deletecollection
-  - get
-  - list
-  - patch
-  - update
-  - watch
----
-# Source: rollouts/templates/install.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  labels:
-    app.kubernetes.io/component: aggregate-cluster-role
-    app.kubernetes.io/name: argo-rollouts-aggregate-to-view
-    app.kubernetes.io/part-of: argo-rollouts
-    rbac.authorization.k8s.io/aggregate-to-view: "true"
-  name: argo-rollouts-aggregate-to-view
-rules:
-- apiGroups:
-  - argoproj.io
-  resources:
-  - rollouts
-  - rollouts/scale
-  - experiments
-  - analysistemplates
-  - clusteranalysistemplates
-  - analysisruns
-  verbs:
-  - get
-  - list
-  - watch
----
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/argo-rollouts-clusterRoleBinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -14782,7 +14782,7 @@ subjects:
   name: argo-rollouts
   namespace: argo-rollouts
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/argo-rollouts-metrics-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -14800,7 +14800,7 @@ spec:
   selector:
     app.kubernetes.io/name: argo-rollouts
 ---
-# Source: rollouts/templates/install.yaml
+# Source: rollouts/templates/argo-rollouts-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

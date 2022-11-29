@@ -29,4 +29,4 @@ route:
   kind: Service
   weight: 100
   targetPort: 8080
-  wildcardPolicy: none
+  wildcardPolicy: None
