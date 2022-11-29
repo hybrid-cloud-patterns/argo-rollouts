@@ -85,9 +85,9 @@ spec:
     targetPort: 8080
   to:
     kind: Service
-    name:  
+    name:  bluegreen-active
     weight: 100
-  wildcardPolicy: none
+  wildcardPolicy: None
 ---
 # Source: bluegreen/templates/route.yaml
 apiVersion: route.openshift.io/v1
@@ -103,9 +103,9 @@ spec:
     targetPort: 8080
   to:
     kind: Service
-    name:  
+    name:  bluegreen-preview
     weight: 100
-  wildcardPolicy: none
+  wildcardPolicy: None
 ---
 # Source: bluegreen/templates/tests/test-connection.yaml
 apiVersion: v1

@@ -64,14 +64,16 @@ metadata:
     app: canary-demo
   annotations:
     argocd.argoproj.io/sync-wave: "3"
+    haproxy.router.openshift.io/balance: roundrobin
+    haproxy.router.openshift.io/disable_cookies: 'true'
 spec:
   port:
     targetPort: http
   to:
     kind: Service
-    name: canary-demo
+    name: canary-demo-service
     weight: 100
-  wildcardPolicy: none
+  wildcardPolicy: None
 ---
 # Source: canary-demo/templates/tests/test-connection.yaml
 apiVersion: v1
