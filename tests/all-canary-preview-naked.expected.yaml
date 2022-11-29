@@ -1,0 +1,115 @@
+---
+# Source: canary-preview/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-preview-preview
+  namespace: canary-preview
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  selector:
+    app: canary-preview-preview
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+---
+# Source: canary-preview/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: canary-preview-production
+  namespace: canary-preview
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  selector:
+    app: canary-preview-production
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+---
+# Source: canary-preview/templates/rollout.yaml
+# This example demonstrates how to deploy a preview ReplicaSet using an Experiment. The preview
+# ReplicaSet will run but receive no production traffic, since its selector labels are set
+# differently than the rollout's selector labels.
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: canary-preview
+  namespace: canary-preview
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: canary-preview-production
+  template:
+    metadata:
+      labels:
+        app: canary-preview-production
+    spec:
+      containers:
+      - name: canary-production
+        image: argoproj/rollouts-demo:blue
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+  strategy:
+    canary:
+      steps:
+      # The initial step starts an experiment that runs a single pod ReplicaSet using the new pod spec
+      # When the experiment is terminated, the rollout will progress through rest of the canary steps.
+      - experiment:
+          templates:
+          - name: canary-preview
+            specRef: canary
+            # Selector and metadata are overwritten to be something different from the rollout's
+            # spec.selector. This allows the preview stack to be reachable through a different
+            # service without receiving production traffic.
+            selector:
+              matchLabels:
+                app: canary-preview-preview
+            metadata:
+              labels:
+                app: canary-preview-preview
+---
+# Source: canary-preview/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: canary-preview-preview
+  namespace: canary-preview
+  labels:
+    app: canary-preview-preview
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: canary-preview-preview
+    weight: 100
+  wildcardPolicy: none
+---
+# Source: canary-preview/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: canary-preview-production
+  namespace: canary-preview
+  labels:
+    app: canary-preview-production
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: canary-preview-production
+    weight: 100
+  wildcardPolicy: none

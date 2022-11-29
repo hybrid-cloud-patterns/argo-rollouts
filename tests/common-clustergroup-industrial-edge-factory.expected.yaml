@@ -145,6 +145,8 @@ data:
         useCSV: false
       pattern: mypattern
       repoURL: https://github.com/pattern-clone/mypattern
+      rollout:
+        image: argoproj/rollouts-demo:blue
       targetRevision: main
     main:
       clusterGroupName: hub
