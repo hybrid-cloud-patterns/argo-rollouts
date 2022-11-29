@@ -1,6 +1,6 @@
 ---
 global:
-  pattern: multicloud-rollouts
+  pattern: argo-rollouts
 
   options:
     useCSV: false
@@ -9,5 +9,6 @@ global:
 
   rollout:
     image: argoproj/rollouts-demo:blue
+
 main:
   clusterGroupName: hub
